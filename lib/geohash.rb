@@ -17,6 +17,8 @@ class GeoHash
 
   NEIGHBOR_DIRECTIONS = [ [0, 1], [2, 3] ]
   
+  attr lat, lng
+  
   # Encode latitude and longitude to a geohash with precision digits
   def self.encode(lat, lon, precision=10)
     encode_base(lat, lon, precision)
@@ -43,6 +45,16 @@ class GeoHash
     end
   end
   
+  def lat
+    @latitude
+  end
+  
+  def lng
+    @longitude
+  end
+  alias_method :lon, :lng
+  
+  end
   def to_s
     @value
   end
