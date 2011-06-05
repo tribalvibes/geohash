@@ -33,11 +33,14 @@ class GeoHash
     if params.first.is_a?(Float)
       @value = GeoHash.encode(*params)
       @latitude, @longitude = params
+    elsif params.first.respond_to?(:lat)
+      @latitude = params.first.lat
+      @longitude = params.shift.lng
+      @value = GeoHash.encode(@latitude, @longitude, *params)
     else
       @value = params.first
       @latitude, @longitude = GeoHash.decode(@value)
     end
-    @bounding_box = GeoHash.decode_bbox(@value)
   end
   
   def to_s
@@ -45,7 +48,7 @@ class GeoHash
   end
   
   def to_bbox
-    GeoHash.decode_bbox(@value)
+    @bounding_box ||= GeoHash.decode_bbox(@value)
   end
   
   def neighbor(dir)
@@ -63,4 +66,5 @@ class GeoHash
     end.flatten
     immediate + diagonals
   end
+
 end
